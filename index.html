@@ -39,19 +39,13 @@
   </main>
 
   <script>
-    /*
-      >>> РЕДАКТИРУЙ ЗДЕСЬ ПЕРЕД ПУБЛИКАЦИЕЙ <<<
-      В массиве должны быть РОВНО:
-        - Математика: 19 чисел (0..5)
-        - Информатика: 27 чисел (0..5)
-      0 — строка без подсветки; 1–2 — красная; 3 — оранжевая; 4 — жёлтая; 5 — зелёная.
-    */
+    // ---- ТВОИ ОЦЕНКИ ----
     const GRADES = {
       math: [
-        5,4,4,3,2,  0,5,4,3,2,  1,5,0,4,3,  5,5,4,3  // 19 значений
+        2,0,2,4,1,  4,4,3,5,3,  3,3,2,0,0,  0,0,0,2  // 19 значений
       ],
       cs: [
-        3,5,4,2,1,  0,0,5,4,3,  2,1,0,5,5,  4,3,2,1,  0,5,4,3,2,  1,5,0// 27 значений
+        4,0,4,4,0,  0,2,4,1,4,  3,4,0,0,0,  0,0,0,0,  0,0,0,0,0,  0,0,0 // 27 значений
       ]
     };
 
@@ -60,20 +54,12 @@
       cs:   { title: "Информатика", count: 27 }
     };
 
+    // --- Основные функции ---
     function showSubject(key) {
       const subj = SUBJECTS[key];
       const data = GRADES[key] || [];
-
-      // защитная проверка на длину
-      if (data.length !== subj.count) {
-        console.warn(
-          `${subj.title}: ожидается ${subj.count} оценок, получено ${data.length}. ` +
-          `Таблица будет построена по минимально возможному количеству строк.`
-        );
-      }
-
       document.getElementById("subjectTitle").textContent = subj.title;
-      populateTable(subj.count, data);
+      populateTable(subj.count, data, key);
       document.getElementById("home").classList.remove("active");
       document.getElementById("subject").classList.add("active");
       window.scrollTo({ top: 0, behavior: "instant" });
@@ -94,13 +80,21 @@
       return "";
     }
 
-    function populateTable(expectedCount, grades) {
+    // --- Таблица с "Вторая часть" ---
+    function populateTable(expectedCount, grades, subjectKey = "") {
       const tbody = document.getElementById("tableBody");
       tbody.innerHTML = "";
 
-      const n = Math.min(expectedCount, grades.length);
-      for (let i = 1; i <= n; i++) {
-        const g = Number(grades[i-1]) || 0;
+      for (let i = 1; i <= expectedCount; i++) {
+        // вставляем разделитель после 12-й строки у математики
+        if (subjectKey === "math" && i === 13) {
+          const trTitle = document.createElement("tr");
+          trTitle.className = "section-title";
+          trTitle.innerHTML = `<td colspan="2">Вторая часть</td>`;
+          tbody.appendChild(trTitle);
+        }
+
+        const g = Number(grades[i - 1] ?? 0);
         const tr = document.createElement("tr");
         tr.className = gradeClass(g);
         tr.innerHTML = `<td>${i}</td><td>${g}</td>`;
@@ -110,5 +104,3 @@
   </script>
 </body>
 </html>
-
-
