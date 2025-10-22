@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Оценки: Математика и Информатика</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Домашний экран -->
+  <main class="container view active" id="home">
+    <h1 class="title">Выберите предмет</h1>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="showSubject('math')">Математика</button>
+      <button class="btn btn-primary" onclick="showSubject('cs')">Информатика</button>
+    </div>
+  </main>
+
+  <!-- Экран предмета -->
+  <main class="container view" id="subject">
+    <header class="topbar">
+      <button class="back" aria-label="Назад" onclick="goBack()">←</button>
+      <h2 class="subject-title" id="subjectTitle">Предмет</h2>
+    </header>
+
+    <div class="table-wrap">
+      <table class="grades">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Оценка</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- строки генерируются скриптом -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    /*
+      >>> РЕДАКТИРУЙ ЗДЕСЬ ПЕРЕД ПУБЛИКАЦИЕЙ <<<
+      В массиве должны быть РОВНО:
+        - Математика: 19 чисел (0..5)
+        - Информатика: 27 чисел (0..5)
+      0 — строка без подсветки; 1–2 — красная; 3 — оранжевая; 4 — жёлтая; 5 — зелёная.
+    */
+    const GRADES = {
+      math: [
+        5,4,4,3,2,  0,5,4,3,2,  1,5,0,4,3,  5,5,4,3  // 19 значений
+      ],
+      cs: [
+        3,5,4,2,1,  0,0,5,4,3,  2,1,0,5,5,  4,3,2,1,  0,5,4,3,2,  1,5 // 27 значений
+      ]
+    };
+
+    const SUBJECTS = {
+      math: { title: "Математика", count: 19 },
+      cs:   { title: "Информатика", count: 27 }
+    };
+
+    function showSubject(key) {
+      const subj = SUBJECTS[key];
+      const data = GRADES[key] || [];
+
+      // защитная проверка на длину
+      if (data.length !== subj.count) {
+        console.warn(
+          `${subj.title}: ожидается ${subj.count} оценок, получено ${data.length}. ` +
+          `Таблица будет построена по минимально возможному количеству строк.`
+        );
+      }
+
+      document.getElementById("subjectTitle").textContent = subj.title;
+      populateTable(subj.count, data);
+      document.getElementById("home").classList.remove("active");
+      document.getElementById("subject").classList.add("active");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function goBack() {
+      document.getElementById("subject").classList.remove("active");
+      document.getElementById("home").classList.add("active");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function gradeClass(g) {
+      if (g === 0) return "";
+      if (g === 1 || g === 2) return "grade-red";
+      if (g === 3) return "grade-orange";
+      if (g === 4) return "grade-yellow";
+      if (g === 5) return "grade-green";
+      return "";
+    }
+
+    function populateTable(expectedCount, grades) {
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+
+      const n = Math.min(expectedCount, grades.length);
+      for (let i = 1; i <= n; i++) {
+        const g = Number(grades[i-1]) || 0;
+        const tr = document.createElement("tr");
+        tr.className = gradeClass(g);
+        tr.innerHTML = `<td>${i}</td><td>${g}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+  </script>
+</body>
+</html>
