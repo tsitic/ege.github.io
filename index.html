@@ -32,20 +32,19 @@
           </tr>
         </thead>
         <tbody id="tableBody">
-          <!-- строки генерируются скриптом -->
         </tbody>
       </table>
     </div>
   </main>
 
   <script>
-    // ---- ТВОИ ОЦЕНКИ ----
+    //ОЦЕНКИ
     const GRADES = {
       math: [
-        2,0,2,4,1,  4,4,3,5,3,  3,3,2,0,0,  0,0,0,2  // 19 значений
+        2,0,2,4,1,  4,4,3,5,3,  3,3,2,0,0,  0,0,0,2  
       ],
       cs: [
-        4,0,4,4,0,  0,2,4,1,4,  3,4,0,0,0,  0,0,0,0,  0,0,0,0,0,  0,0,0 // 27 значений
+        3,0,4,4,0,  0,2,3,1,4,  3,4,0,0,0,  0,0,0,0,  0,0,0,0,0,  0,0,0 
       ]
     };
 
@@ -54,7 +53,7 @@
       cs:   { title: "Информатика", count: 27 }
     };
 
-    // --- Основные функции ---
+    //Основные функции
     function showSubject(key) {
       const subj = SUBJECTS[key];
       const data = GRADES[key] || [];
@@ -80,13 +79,13 @@
       return "";
     }
 
-    // --- Таблица с "Вторая часть" ---
+    //"Вторая часть"
     function populateTable(expectedCount, grades, subjectKey = "") {
       const tbody = document.getElementById("tableBody");
       tbody.innerHTML = "";
 
       for (let i = 1; i <= expectedCount; i++) {
-        // вставляем разделитель после 12-й строки у математики
+        //разделитель после 12-й строки у мат
         if (subjectKey === "math" && i === 13) {
           const trTitle = document.createElement("tr");
           trTitle.className = "section-title";
@@ -104,3 +103,4 @@
   </script>
 </body>
 </html>
+
